@@ -15,10 +15,10 @@ def register_user(user):
     )
 
     if existing_user:
-
-        return {
-            "error": "User already exists"
-        }
+        raise HTTPException(
+         status_code=400,
+        detail="User already exists"
+    )
 
     hashed_password = hash_password(
         user.password
@@ -39,6 +39,8 @@ def register_user(user):
     }
 
 
+from fastapi import HTTPException
+
 def login_user(user):
 
     db_user = user_repository.find_user_by_roll_no(
@@ -46,10 +48,10 @@ def login_user(user):
     )
 
     if not db_user:
-
-        return {
-            "error": "Invalid credentials"
-        }
+        raise HTTPException(
+            status_code=401,
+            detail="Invalid credentials"
+        )
 
     password_valid = verify_password(
         user.password,
@@ -57,10 +59,10 @@ def login_user(user):
     )
 
     if not password_valid:
-
-        return {
-            "error": "Invalid credentials"
-        }
+        raise HTTPException(
+            status_code=401,
+            detail="Invalid credentials"
+        )
 
     token = create_access_token({
         "roll_no": db_user["roll_no"],

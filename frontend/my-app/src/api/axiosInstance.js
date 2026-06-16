@@ -16,15 +16,20 @@ axiosInstance.interceptors.request.use(
   (error) => Promise.reject(error)
 )
 
-// Handle 401 globally
 axiosInstance.interceptors.response.use(
   (response) => response,
   (error) => {
-    if (error.response?.status === 401) {
+
+    if (
+      error.response?.status === 401 &&
+      localStorage.getItem('srkr_token')
+    ) {
       localStorage.removeItem('srkr_token')
       localStorage.removeItem('srkr_user')
+
       window.location.href = '/login'
     }
+
     return Promise.reject(error)
   }
 )

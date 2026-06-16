@@ -31,12 +31,17 @@ export function AuthProvider({ children }) {
       if (role === 'admin') navigate('/admin')
       else navigate('/student')
     } catch (err) {
-     toast.error(
-  err.response?.data?.error ||
-  err.response?.data?.detail?.[0]?.msg ||
-  'Login failed'
-)
-    } finally {
+  console.log("LOGIN ERROR:", err);
+  console.log("RESPONSE:", err.response);
+  console.log("DATA:", err.response?.data);
+
+  toast.error(
+    err.response?.data?.detail ||
+    err.response?.data?.error ||
+    'Login failed'
+  )
+}
+    finally {
       setLoading(false)
     }
   }, [navigate])
