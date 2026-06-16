@@ -1,0 +1,35 @@
+# Python
+__pycache__/
+*.pyc
+
+# Virtual Environment
+venv/
+
+# Environment Variables
+.env
+
+# Excel Files
+*.xlsx
+
+# Selenium
+chromedriver.exe
+
+# Logs
+*.log
+
+# VS Code
+.vscode/
+
+# Node
+node_modules/
+
+# Build
+dist/
+build/
+
+# Redis
+dump.rdb
+
+# OS Files
+.DS_Store
+Thumbs.db
