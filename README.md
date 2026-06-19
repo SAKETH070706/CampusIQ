@@ -94,36 +94,6 @@ frontend/
 * Multiple sections supported
 * Semester-wise academic history stored
 
-## Screenshots
-
-### Student Dashboard
-
-<img width="1907" height="947" alt="Screenshot 2026-06-16 153238" src="https://github.com/user-attachments/assets/8953e269-c661-4060-bc9d-1809d817916c" />
-
-### Admin Dashboard
-
-<img width="1886" height="965" alt="Screenshot 2026-06-16 152548" src="https://github.com/user-attachments/assets/decd011d-d160-4939-a811-4fbd677dcf14" />
-
-
-### Global Rankings
-<img width="1891" height="953" alt="Screenshot 2026-06-16 152603" src="https://github.com/user-attachments/assets/ea6e9ebc-535e-4110-9c6b-f69ff1cb9561" />
-
-### Branch Analytics
-
-<img width="1907" height="956" alt="Screenshot 2026-06-16 152641" src="https://github.com/user-attachments/assets/28c99776-6c5c-4135-be78-b41ae5740e30" />
-
-
-### Section Analytics
-
-<img width="1907" height="941" alt="Screenshot 2026-06-16 152729" src="https://github.com/user-attachments/assets/3808175e-d8cd-4633-b8ab-708a273fe6a2" />
-
-### Subject Analytics
- <img width="1905" height="952" alt="Screenshot 2026-06-16 152845" src="https://github.com/user-attachments/assets/195cfb0a-3226-4f5f-97eb-07921124b64d" />
-
-
-### Failure Analytics
-
-<img width="1898" height="963" alt="Screenshot 2026-06-16 152902" src="https://github.com/user-attachments/assets/49b55183-828c-4852-8451-b65580d6cb2b" />
 
 
 ## Installation
