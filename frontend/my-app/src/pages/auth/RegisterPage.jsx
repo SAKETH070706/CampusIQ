@@ -5,8 +5,7 @@ import useAuth from '../../hooks/useAuth'
 export default function RegisterPage() {
   const { register, loading } = useAuth()
 
-  // BUG #3 FIX: backend UserRegister requires roll_no, name, email, password, role
-  // Previous form only had roll_no and password — missing name and email entirely
+ 
   const [form, setForm] = useState({
     roll_no:  '',
     name:     '',

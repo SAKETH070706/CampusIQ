@@ -1,17 +1,14 @@
 import { useNavigate } from 'react-router-dom'
 
-// BUG #5 FIX: Backend TopperResponse fields are:
-//   roll_no, name, branch, section, sgpa, cgpa
-// Previous code tried topper.student_name (wrong) and topper.branch_code (wrong)
+
 export default function TopperCard({ topper, isAdmin = false }) {
   const navigate = useNavigate()
   if (!topper) return null
 
-  // Backend sends 'name' not 'student_name'; 'branch' not 'branch_code'
   const name    = topper.name    || '—'
   const roll    = topper.roll_no || '—'
   const cgpa    = topper.cgpa    ?? '—'
-  const branch  = topper.branch  || ''   // fixed: was topper.branch_code
+  const branch  = topper.branch  || ''  
   const section = topper.section || ''
   const initials = name.split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase()
 

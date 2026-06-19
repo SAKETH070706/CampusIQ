@@ -2,42 +2,54 @@
 
 /* ---------- CSS Variables ---------- */
 :root {
-  --bg-base:       #0d1117;
-  --bg-surface:    #161b27;
-  --bg-elevated:   #1e2d45;
-  --bg-hover:      #1a2540;
+  /* Backgrounds */
+  --bg-base: #f5f9ff;
+  --bg-surface: #ffffff;
+  --bg-elevated: #edf4ff;
+  --bg-hover: #e4efff;
 
-  --border:        #1e2d45;
-  --border-light:  #243352;
+  /* Borders */
+  --border: #d6e4f5;
+  --border-light: #c6d8ef;
 
-  --text-primary:  #e8edf5;
-  --text-secondary:#9aafc7;
-  --text-muted:    #5c7499;
+  /* Text */
+  --text-primary: #1e3a5f;
+  --text-secondary: #4b6485;
+  --text-muted: #7b93b3;
 
-  --accent:        #3b82f6;
-  --accent-dim:    rgba(59,130,246,0.12);
-  --success:       #10b981;
-  --success-dim:   rgba(16,185,129,0.12);
-  --warning:       #f59e0b;
-  --warning-dim:   rgba(245,158,11,0.12);
-  --danger:        #ef4444;
-  --danger-dim:    rgba(239,68,68,0.12);
-  --purple:        #8b5cf6;
-  --purple-dim:    rgba(139,92,246,0.12);
-  --cyan:          #06b6d4;
-  --cyan-dim:      rgba(6,182,212,0.12);
+  /* Primary Blue */
+  --accent: #2563eb;
+  --accent-dim: rgba(37, 99, 235, 0.08);
 
-  --sidebar-w:     240px;
-  --topbar-h:      60px;
-  --radius:        12px;
-  --radius-sm:     8px;
+  /* Supporting Colors (muted) */
+  --success: #2e8b57;
+  --success-dim: rgba(46, 139, 87, 0.08);
 
-  --font-sans:     'Inter', system-ui, -apple-system, sans-serif;
-  --font-mono:     'JetBrains Mono', 'Fira Code', monospace;
+  --warning: #d97706;
+  --warning-dim: rgba(217, 119, 6, 0.08);
 
-  --shadow-sm:     0 1px 3px rgba(0,0,0,0.4);
-  --shadow-md:     0 4px 16px rgba(0,0,0,0.5);
-  --shadow-lg:     0 8px 32px rgba(0,0,0,0.6);
+  --danger: #dc2626;
+  --danger-dim: rgba(220, 38, 38, 0.08);
+
+  --purple: #64748b;
+  --purple-dim: rgba(100, 116, 139, 0.08);
+
+  --cyan: #4682b4;
+  --cyan-dim: rgba(70, 130, 180, 0.08);
+
+  /* Layout */
+  --sidebar-w: 240px;
+  --topbar-h: 60px;
+  --radius: 12px;
+  --radius-sm: 8px;
+
+  --font-sans: 'Inter', system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+
+  /* Softer shadows */
+  --shadow-sm: 0 1px 3px rgba(30, 58, 95, 0.06);
+  --shadow-md: 0 4px 12px rgba(30, 58, 95, 0.08);
+  --shadow-lg: 0 8px 24px rgba(30, 58, 95, 0.10);
 }
 
 /* ---------- Reset & Base ---------- */
