@@ -1,7 +1,7 @@
 import axios from 'axios'
 
 const axiosInstance = axios.create({
-  baseURL: 'http://localhost:8000',          
+  baseURL: 'https://campusiq-8e30.onrender.com',          
   timeout: 15000,
   headers: { 'Content-Type': 'application/json' },
 })

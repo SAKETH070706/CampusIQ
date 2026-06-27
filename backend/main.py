@@ -24,7 +24,7 @@ app = FastAPI(
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[
-        "http://localhost:5173"
+        "https://campusiq-8e30.onrender.com"
     ],
     allow_credentials=True,
     allow_methods=["*"],
