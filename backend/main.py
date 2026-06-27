@@ -24,7 +24,7 @@ app = FastAPI(
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[
-        "https://campusiq-8e30.onrender.com"
+        "https://campus-iq-sigma.vercel.app"
     ],
     allow_credentials=True,
     allow_methods=["*"],
