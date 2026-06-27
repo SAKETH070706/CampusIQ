@@ -35,13 +35,7 @@ app.add_middleware(
 def startup_event():
 
     connect_db()
-    settings.roll_numbers = load_students_from_excel(
-        r"D:\WEB DEVELOPMENT\Portal\backend\students.xlsx"
-    )
-
-    print(
-        f"✅ Loaded {len(settings.roll_numbers)} students"
-    )
+    
 
 # -------------------------------
 # AUTH ROUTES
