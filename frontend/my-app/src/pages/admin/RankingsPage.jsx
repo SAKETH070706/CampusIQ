@@ -1,15 +1,20 @@
 import { useState } from 'react'
-import { useRankings } from '../../hooks/useAnalytics'
+import { useRankings,useMeritRankings } from '../../hooks/useAnalytics'
 import RankingsTable from '../../components/ui/RankingsTable'
 import { SkeletonTable } from '../../components/ui/SkeletonLoader'
 import StatCard from '../../components/ui/StatCard'
 
+
 export default function RankingsPage() {
   
-  const { data: rankings = [], isLoading, isError } = useRankings()
   const [branchFilter,  setBranchFilter]  = useState('')
   const [sectionFilter, setSectionFilter] = useState('')
+  const [rankingType, setRankingType] = useState('official')
+  const official = useRankings(rankingType === 'official')
+  const merit = useMeritRankings(rankingType === 'merit')
+  
 
+  const {data: rankings = [], isLoading, isError} = rankingType === 'official'? official: merit
   
   const totalStudents = rankings[0]?.total_students ?? rankings.length
 
@@ -43,7 +48,7 @@ export default function RankingsPage() {
 
       <div className="card">
         <div className="card-header">
-          <div className="card-title">📋 Student Rankings</div>
+          <div className="card-title">{rankingType === 'official' ? '📋 Official Rankings': '🏅 Merit Rankings'}</div>
           <div className="filters-bar" style={{ margin: 0 }}>
             <select className="filter-select" value={branchFilter} onChange={e => setBranchFilter(e.target.value)}>
               <option value="">All Branches</option>
@@ -53,8 +58,12 @@ export default function RankingsPage() {
               <option value="">All Sections</option>
               {sections.map(s => <option key={s} value={s}>Section {s}</option>)}
             </select>
-            {(branchFilter || sectionFilter) && (
-              <button className="btn btn-ghost btn-sm" onClick={() => { setBranchFilter(''); setSectionFilter('') }}>
+            <select className="filter-select" value={rankingType} onChange={(e) => setRankingType(e.target.value)}>
+                  <option value="official">Official Ranking</option>
+                  <option value="merit">Merit Ranking</option>
+            </select>
+            {(branchFilter || sectionFilter || rankingType ) && (
+              <button className="btn btn-ghost btn-sm" onClick={() => { setBranchFilter(''); setSectionFilter(''); setRankingType('');}}>
                 Clear
               </button>
             )}
@@ -63,7 +72,7 @@ export default function RankingsPage() {
 
         {isLoading && <SkeletonTable rows={8} />}
         {isError   && <div className="error-banner">⚠️ Failed to load rankings. Please try again.</div>}
-        {!isLoading && !isError && <RankingsTable data={filtered} isAdmin />}
+        {!isLoading && !isError && <RankingsTable data={filtered} isAdmin showAttempts={rankingType === "merit"} />}
       </div>
     </div>
   )

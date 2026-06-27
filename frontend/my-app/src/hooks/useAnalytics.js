@@ -1,18 +1,25 @@
 import { useQuery } from '@tanstack/react-query'
 import {
   getTopper,
-  getRankings,
+  getRankings,getMeritRankings,
   getBranchAverage,
   getFailures,
   getSubjectStats,
 } from '../api/analytics.api'
 
-export function useTopper() {
-  return useQuery({ queryKey: ['analytics', 'topper'], queryFn: getTopper })
+export function useTopper(enabled = true) {
+  return useQuery({ queryKey: ['analytics', 'topper'], queryFn: getTopper, enabled, })
 }
 
-export function useRankings() {
-  return useQuery({ queryKey: ['analytics', 'rankings'], queryFn: getRankings })
+export function useRankings(enabled = true) {
+  return useQuery({ queryKey: ['analytics', 'rankings'], queryFn: getRankings, enabled, })
+}
+
+export function useMeritRankings() {
+  return useQuery({
+    queryKey: ['analytics', 'merit-rankings'],
+    queryFn: getMeritRankings,
+  })
 }
 
 export function useBranchAverage(branch) {

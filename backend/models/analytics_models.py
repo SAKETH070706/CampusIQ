@@ -1,5 +1,5 @@
 from pydantic import BaseModel
-from typing import List
+from typing import List, Optional
 
 class TopperResponse(BaseModel):
     roll_no: str
@@ -9,9 +9,11 @@ class TopperResponse(BaseModel):
     sgpa: float
     cgpa: float
 
+
 class BranchAverageResponse(BaseModel):
     branch: str
     average_cgpa: float
+
 
 class FailedSubject(BaseModel):
     semester: str
@@ -25,15 +27,19 @@ class FailureResponse(BaseModel):
     section: str
     failed_subjects: List[FailedSubject]
 
+
 class SubjectStat(BaseModel):
     roll_no: str
     name: str
+    branch: str
     section: str
     grade: str
+
 
 class SubjectStatisticsResponse(BaseModel):
     sub_code: str
     statistics: List[SubjectStat]
+
 
 class RankingResponse(BaseModel):
     rank: int
@@ -44,3 +50,4 @@ class RankingResponse(BaseModel):
     cgpa: float
     sgpa: float
     total_students: int
+    extra_attempts: Optional[int] = None

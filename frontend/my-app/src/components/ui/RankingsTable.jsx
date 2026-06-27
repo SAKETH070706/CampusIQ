@@ -7,7 +7,7 @@ function RankBadge({ rank }) {
   return <span className={`rank-badge ${cls}`}>{rank}</span>
 }
 
-export default function RankingsTable({ data = [], isAdmin = false }) {
+export default function RankingsTable({ data = [], isAdmin = false, showAttempts = false }) {
   const navigate = useNavigate()
   const [search, setSearch] = useState('')
   const [sortKey, setSortKey] = useState('rank')
@@ -55,11 +55,19 @@ export default function RankingsTable({ data = [], isAdmin = false }) {
               <th onClick={() => toggle('sgpa')} style={{ cursor: 'pointer' }}>SGPA{arrow('sgpa')}</th>
               <th onClick={() => toggle('cgpa')} style={{ cursor: 'pointer' }}>CGPA{arrow('cgpa')}</th>
               {isAdmin && <th>Action</th>}
+              {showAttempts && (
+    <th
+        onClick={() => toggle('extra_attempts')}
+        style={{ cursor: 'pointer' }}
+    >
+        Attempts{arrow('extra_attempts')}
+    </th>
+                 )}
             </tr>
           </thead>
           <tbody>
             {filtered.length === 0 && (
-              <tr><td colSpan={isAdmin ? 8 : 7} style={{ textAlign: 'center', color: 'var(--text-muted)', padding: 32 }}>No results found</td></tr>
+              <tr><td colSpan={(isAdmin ? 8 : 7) + (showAttempts ? 1 : 0)} style={{ textAlign: 'center', color: 'var(--text-muted)', padding: 32 }}>No results found</td></tr>
             )}
             {filtered.map((s, i) => (
               <tr key={s.roll_no || i}>
@@ -77,6 +85,11 @@ export default function RankingsTable({ data = [], isAdmin = false }) {
                     </button>
                   </td>
                 )}
+                {showAttempts && (
+    <td className="td-mono">
+        {s.extra_attempts}
+    </td>
+)}
               </tr>
             ))}
           </tbody>

@@ -57,3 +57,15 @@ def ranking():
     if not result:
         raise HTTPException(status_code=404, detail="No students found")
     return result
+
+@router.get("/ranking/merit", response_model=List[RankingResponse])
+def merit_ranking():
+    result = analytics_service.rank_students_merit()
+
+    if not result:
+        raise HTTPException(
+            status_code=404,
+            detail="No students found"
+        )
+
+    return result

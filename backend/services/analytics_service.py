@@ -57,6 +57,115 @@ def rank_students():
 
     return ranking
 
+def rank_students_merit():
+
+    students = student_repository.get_all_students()
+
+    total_students = len(students)
+
+    if total_students == 0:
+        return []
+
+    ranking = []
+
+    for s in students:
+
+        semesters = s.get("semesters", [])
+
+        if not semesters:
+            continue
+
+        valid_semesters = []
+
+        for sem in semesters:
+
+            try:
+
+                cgpa = float(
+                    sem.get("cgpa", 0)
+                )
+
+                if cgpa > 0:
+                    valid_semesters.append(sem)
+
+            except:
+                continue
+
+        if not valid_semesters:
+            continue
+
+        latest_sem = valid_semesters[-1]
+
+        cgpa = float(
+            latest_sem.get("cgpa", 0)
+        )
+
+        sgpa = float(
+            latest_sem.get("sgpa", 0)
+        )
+
+        extra_attempts = 0
+
+        for sem in semesters:
+
+            for subject in sem.get("subjects", []):
+
+                attempts = subject.get(
+                    "attempts",
+                    1
+                )
+
+                if attempts > 1:
+                    extra_attempts += (
+                        attempts - 1
+                    )
+
+        info = s.get("student_info", {})
+
+        ranking.append({
+
+            "roll_no": s.get("roll_no"),
+
+            "name": info.get(
+                "student_name",
+                "N/A"
+            ),
+
+            "branch": info.get(
+                "branch_code",
+                "N/A"
+            ),
+
+            "section": info.get(
+                "section",
+                "N/A"
+            ),
+
+            "cgpa": cgpa,
+
+            "sgpa": sgpa,
+
+            "total_students": total_students,
+
+            "extra_attempts": extra_attempts
+        })
+
+    ranking.sort(
+        key=lambda x: (
+            x["extra_attempts"],
+            -x["cgpa"],
+            -x["sgpa"]
+        )
+    )
+
+    for index, student in enumerate(
+        ranking,
+        start=1
+    ):
+
+        student["rank"] = index
+
+    return ranking
 
 def get_topper():
    
@@ -147,6 +256,7 @@ def subject_statistics(subject_code: str):
                     stats.append({
                         "roll_no": s.get("roll_no"),
                         "name": s.get("student_info", {}).get("student_name", "N/A"),
+                        "branch": s.get("student_info", {}).get("branch_code", "N/A"),
                         "section": s.get("student_info", {}).get("section", "N/A"),
                         "semester": sem.get("semester"),
                         "grade": subj.get("grade")

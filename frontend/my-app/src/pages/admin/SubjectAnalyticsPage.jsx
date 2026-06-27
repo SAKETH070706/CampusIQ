@@ -5,74 +5,209 @@ import StatCard from '../../components/ui/StatCard'
 import SearchBar from '../../components/ui/SearchBar'
 import { SkeletonCard } from '../../components/ui/SkeletonLoader'
 
-// BUG #10 FIX: Backend /analytics/subject/{sub_code} returns:
-//   { sub_code, statistics: [{roll_no, name, section, grade}] }
-// Previous code read data.students — that field does NOT exist.
-// Correct field is data.statistics.
-// Also SubjectStat has: roll_no, name, section, grade — NO result/pass/fail field,
-// NO subject_code/subject_name nested inside.
 function SubjectDetail({ subject_code }) {
   const { data, isLoading, isError } = useSubjectStats(subject_code)
+
+  const [branchFilter, setBranchFilter] = useState('')
+  const [sectionFilter, setSectionFilter] = useState('')
+
   if (isLoading) return <SkeletonCard height={200} />
-  if (isError || !data) return <div className="error-banner">⚠️ Could not load subject data.</div>
+  if (isError || !data)
+    return <div className="error-banner">⚠️ Could not load subject data.</div>
 
-  // BUG #10 FIX: use data.statistics not data.students
   const stats = data.statistics || []
-  const total = stats.length
 
-  // SubjectStat has 'grade' only — no 'result' field in this response
-  // Count pass by grade !== 'F' and grade !== 'Ab'
-  const passCount = stats.filter(s => s.grade && s.grade !== 'F' && s.grade !== 'Ab').length
-  const failCount = stats.filter(s => s.grade === 'F' || s.grade === 'Ab').length
-  const passPercent = total ? ((passCount / total) * 100).toFixed(1) : '—'
+  const branches = [...new Set(stats.map(s => s.branch).filter(Boolean))]
+  const sections = [...new Set(stats.map(s => s.section).filter(Boolean))]
 
-  // Build subjects array compatible with GradeDistributionChart (needs .grade)
-  const subjectsForChart = stats.map(s => ({ grade: s.grade }))
+  const filtered = stats.filter(s => {
+    if (branchFilter && s.branch !== branchFilter) return false
+    if (sectionFilter && s.section !== sectionFilter) return false
+    return true
+  })
+
+  const total = filtered.length
+
+  const passCount = filtered.filter(
+    s => s.grade && s.grade !== 'F' && s.grade !== 'Ab'
+  ).length
+
+  const failCount = filtered.filter(
+    s => s.grade === 'F' || s.grade === 'Ab'
+  ).length
+
+  const passPercent = total
+    ? ((passCount / total) * 100).toFixed(1)
+    : '—'
+
+  const subjectsForChart = filtered.map(s => ({
+    grade: s.grade,
+  }))
 
   return (
     <>
-      <div className="stat-grid mt-16" style={{ marginTop: 16 }}>
-        <StatCard label="Total Students" value={total}            icon="👥" color="blue" />
-        <StatCard label="Pass %"         value={`${passPercent}%`} icon="✅" color="green" />
-        <StatCard label="Pass Count"     value={passCount}        icon="✓"  color="green" />
-        <StatCard label="Fail Count"     value={failCount}        icon="⚠️" color="red" />
+      
+
+      <div className="stat-grid mt-16">
+        <StatCard
+          label="Total Students"
+          value={total}
+          icon="👥"
+          color="blue"
+        />
+        <StatCard
+          label="Pass %"
+          value={`${passPercent}%`}
+          icon="✅"
+          color="green"
+        />
+        <StatCard
+          label="Pass Count"
+          value={passCount}
+          icon="✓"
+          color="green"
+        />
+        <StatCard
+          label="Fail Count"
+          value={failCount}
+          icon="⚠️"
+          color="red"
+        />
       </div>
 
-      <div className="grid-2 mt-16" style={{ marginTop: 16 }}>
+      <div className="grid-2 mt-16">
         <div className="card">
-          <div className="card-title mb-16" style={{ marginBottom: 12 }}>Grade Distribution</div>
-          <GradeDistributionChart subjects={subjectsForChart} />
+          <div className="card-title mb-16">
+            Grade Distribution
+          </div>
+
+          <GradeDistributionChart
+            subjects={subjectsForChart}
+          />
         </div>
+
         <div className="card">
-          <div className="card-title mb-16" style={{ marginBottom: 12 }}>Student Grades</div>
-          <div className="table-wrapper" style={{ maxHeight: 280, overflowY: 'auto' }}>
+          <div className="card-title mb-16">
+            Student Grades
+          </div>
+
+          <div
+            className="table-wrapper"
+            style={{
+              maxHeight: 320,
+              overflowY: 'auto',
+            }}
+          >
+
+          <div
+        className="filters-bar"
+        style={{ marginBottom: 20 }}
+      >
+        <select
+          className="filter-select"
+          value={branchFilter}
+          onChange={(e) => setBranchFilter(e.target.value)}
+        >
+          <option value="">All Branches</option>
+          {branches.map(branch => (
+            <option key={branch} value={branch}>
+              {branch}
+            </option>
+          ))}
+        </select>
+
+        <select
+          className="filter-select"
+          value={sectionFilter}
+          onChange={(e) => setSectionFilter(e.target.value)}
+        >
+          <option value="">All Sections</option>
+          {sections.map(section => (
+            <option key={section} value={section}>
+              Section {section}
+            </option>
+          ))}
+        </select>
+
+        {(branchFilter || sectionFilter) && (
+          <button
+            className="btn btn-ghost btn-sm"
+            onClick={() => {
+              setBranchFilter('')
+              setSectionFilter('')
+            }}
+          >
+            Clear
+          </button>
+        )}
+      </div>
+
             <table>
               <thead>
                 <tr>
                   <th>Roll No</th>
                   <th>Name</th>
+                  <th>Branch</th>
                   <th>Section</th>
                   <th>Grade</th>
                 </tr>
               </thead>
+
               <tbody>
-                {stats.map((s, i) => {
-                  const failed = s.grade === 'F' || s.grade === 'Ab'
+                {filtered.map((s, i) => {
+                  const failed =
+                    s.grade === 'F' ||
+                    s.grade === 'Ab'
+
                   return (
-                    <tr key={i} style={failed ? { background: 'rgba(239,68,68,0.04)' } : {}}>
-                      <td className="td-mono">{s.roll_no || '—'}</td>
-                      <td>{s.name || '—'}</td>       {/* BUG #10 FIX: field is 'name' not 'student_name' */}
-                      <td className="td-mono">{s.section || '—'}</td>
+                    <tr
+                      key={i}
+                      style={
+                        failed
+                          ? {
+                              background:
+                                'rgba(239,68,68,0.04)',
+                            }
+                          : {}
+                      }
+                    >
+                      <td className="td-mono">
+                        {s.roll_no}
+                      </td>
+
+                      <td>{s.name}</td>
+
+                      <td>{s.branch}</td>
+
+                      <td>{s.section}</td>
+
                       <td>
-                        <span className={`badge ${failed ? 'badge-fail' : 'badge-grade'}`}>
-                          {s.grade || '—'}
+                        <span
+                          className={`badge ${
+                            failed
+                              ? 'badge-fail'
+                              : 'badge-grade'
+                          }`}
+                        >
+                          {s.grade}
                         </span>
                       </td>
                     </tr>
                   )
                 })}
-                {stats.length === 0 && (
-                  <tr><td colSpan={4} style={{ textAlign: 'center', color: 'var(--text-muted)', padding: 24 }}>No data</td></tr>
+
+                {filtered.length === 0 && (
+                  <tr>
+                    <td
+                      colSpan={5}
+                      style={{
+                        textAlign: 'center',
+                        padding: 25,
+                      }}
+                    >
+                      No students found.
+                    </td>
+                  </tr>
                 )}
               </tbody>
             </table>
@@ -87,10 +222,7 @@ export default function SubjectAnalyticsPage() {
   const [subjectCode, setSubjectCode] = useState('')
   const [search, setSearch] = useState('')
 
-  // BUG #11 FIX: Rankings API does NOT include .subjects on each student.
-  // RankingResponse only has: rank, roll_no, name, branch, section, cgpa, sgpa.
-  // Subject list cannot be built from rankings.
-  // Solution: allow the admin to type a subject code directly.
+
   const handleSearch = (val) => {
     setSearch(val)
     // Reset selected subject when typing a new search

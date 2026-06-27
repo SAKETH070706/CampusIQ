@@ -29,7 +29,6 @@ def normalize_subjects(subjects):
         else:
 
             latest_subjects[code]["attempts"] += 1
-
             latest_subjects[code]["grade"] = subject["grade"]
             latest_subjects[code]["result"] = subject["result"]
             latest_subjects[code]["exam_month"] = subject["exam_month"]

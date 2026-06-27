@@ -6,6 +6,9 @@ export const getTopper = () =>
 export const getRankings = () =>
   axiosInstance.get('/analytics/ranking').then((r) => r.data)
 
+export const getMeritRankings = () =>
+  axiosInstance.get('/analytics/ranking/merit').then((r) => r.data)
+
 export const getBranchAverage = (branch) =>
   axiosInstance.get(`/analytics/branch/${branch}`).then((r) => r.data)
 
